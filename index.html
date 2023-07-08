@@ -20,16 +20,32 @@
 
    <main>
     <!--User Search bar and historical search history div-->
-    <div class="">
-        <H3>Search</H3>
-        <!--Historic search container keep empty for js insert-->
-        <div></div>
-       
+    <div class="search">
+        <H3 class="search-header text-uppercase">Search by City </H3>
+        <form id="search-form" class="search-body">
+            <label class="search-label" for="cityname">City</label>
+            <input name="cityname" id="cityname" type="text" autofocus="true" class="form-input" />
+            <button type="submit" class="btn">Get Weather</button>
+        </form>
+    
+
+    <!--Historic search container keep empty for js insert-->
+    <div>
+
+
     </div>
 
     </div>
-    <!--Five day looking forward boxes container keep empty for js insert-->
-    <div>
+
+    <div id="search-output-divs" class="search-output">
+        <H2 class="search-output-header text-uppercase">Five Day Forecast for <span id="city-search-term"></span> </H2>
+    
+    <div><!--Five day looking forward boxes container keep empty for js insert-->
+
+
+    </div>
+
+    </div>
 
     </main>
 
