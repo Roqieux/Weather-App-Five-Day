@@ -28,23 +28,26 @@
             <button type="submit" class="btn">Get Weather</button>
         </form>
     
-
-    <!--Historic search container keep empty for js insert-->
+        <!--Historic search container keep empty for js insert placeholder for now-->
     <div>
 
+    </div>
+
+    <!--Current day container-->
+    <div class="current-output">
+        <H2 class="search-output-header">Current Weather for <span id="current-search-term"></span></H2>
+            <div id="current-day-weather-div" class="current-output">
+            </div>
 
     </div>
 
-    </div>
-
-    <div id="search-output-divs" class="search-output">
-        <H2 class="search-output-header text-uppercase">Five Day Forecast for <span id="city-search-term"></span> </H2>
     
-    <div><!--Five day looking forward boxes container keep empty for js insert-->
-
-
-    </div>
-
+    <!--5 day forecast container-->
+    <div id="search-output-divs" class="search-output">
+        <H2 class="search-output-header">Five Day Forecast for <span id="five-day-search-term"></span></H2>
+            <div id="search-output-divs">
+            </div>
+    
     </div>
 
     </main>
@@ -55,6 +58,7 @@
   integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
   crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 
