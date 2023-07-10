@@ -7,6 +7,7 @@ var cityTitleEl = document.querySelector('#current-search-term');
 var fiveDayTitleEl = document.querySelector('#five-day-search-term');
 var fiveDayContainerEl = document.querySelector('#search-output-divs');
 var currentDayContainerEl = document.querySelector('#current-day-weather-div');
+var buttonContainerEl = document.getElementById('historic-button-container')
 //var 
 
 var APIkey = "84d432449debd5602d5b6391507b4419"
@@ -16,6 +17,8 @@ var APIkey = "84d432449debd5602d5b6391507b4419"
 
 var formInputHandler = function (event) {
     event.preventDefault();
+
+    removeDisplays();
 
     var cityname = cityInputEl.value.trim();
     console.log(cityname)
@@ -86,7 +89,7 @@ var retreiveForecast = function (lat,lon) {
     });
 };
 
-var displayWeather = function (forecast, cityName) {
+var displayWeather = function (forecast, cityname) {
     if(forecast.length === 0) {
         currentDayContainerEl.textContent = 'No forecast found.';
         return;
@@ -248,5 +251,34 @@ var displayWeather = function (forecast, cityName) {
     //5 day forecast complete. 
     }
 };
+
+var removeDisplays = function () {
+    //removes current weather div
+    if (currentDayContainerEl.hasChildNodes()) {
+        currentDayContainerEl.removeChild(currentDayContainerEl.firstChild);
+    } else {
+        return;
+    } 
+    //removes 5 day divs 
+    if (fiveDayContainerEl.hasChildNodes()) {
+        while (fiveDayContainerEl.hasChildNodes())
+        fiveDayContainerEl.firstChild.remove()
+    } else {
+        return;
+    }
+};
+
+var generateButtons = function (buttonName) {
+    var buttonEl = document.createElement('button');
+    buttonEl.textContent = buttonName;
+    buttonEl.classList = 'btn historic-search'
+
+    buttonContainerEl.appendChild(buttonEl);
+        
+
+}
+
+
+
 
 searchFormEl.addEventListener('submit', formInputHandler);
