@@ -1,62 +1,68 @@
 <!DOCTYPE html>
 
-<html lang = "en">
+<html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/style.css" />
-    
+
     <title>5 Day Weather App</title>
 </head>
 
-<body class="">
+<body class="bg-info-subtle">
+
+    <main class="">
+        <!--User Search bar and historical search history div-->
+
+      <div class="d-flex row mb-4">
+        <div class="col-sm-12 col-lg-3 search-container text-center">
+            <H3 class="search-header">Search by City </H3>
+            <form id="search-form" class="search-body">
+                <label class="search-label" for="cityname">City</label>
+                <input name="cityname" id="cityname" type="text" autofocus="true" class="col-8 form-input" />
+                <button type="submit" class="m-2 btn btn-light btn-outline-secondary shadow">Get Weather</button>
+            </form>
+        </div>
+        
 
 
 
+        <!--Current day container-->
+        <div class="col-sm-12 col-lg-9 text-center current-output ">
+            <H3 class="search-output-header">Current Weather for <span id="current-search-term"></span></H3>
+            <div id="current-day-weather-div"class="row justify-content-center current-output m-4">
+            </div>
 
-   <main>
-    <!--User Search bar and historical search history div-->
-    <div class="search">
-        <H3 class="search-header text-uppercase">Search by City </H3>
-        <form id="search-form" class="search-body">
-            <label class="search-label" for="cityname">City</label>
-            <input name="cityname" id="cityname" type="text" autofocus="true" class="form-input" />
-            <button type="submit" class="btn">Get Weather</button>
-        </form>
-    
+        </div>
+      </div> 
+
+      <div class="d-flex row mt-4">
         <!--Historic search container keep empty for js insert placeholder for now-->
-    <div>
-
-    </div>
-
-    <!--Current day container-->
-    <div class="current-output">
-        <H2 class="search-output-header">Current Weather for <span id="current-search-term"></span></H2>
-            <div id="current-day-weather-div" class="current-output">
-            </div>
-
-    </div>
-
-    
-    <!--5 day forecast container-->
-    <div class="search-output">
-        <H2 class="search-output-header">Five Day Forecast for <span id="five-day-search-term"></span></H2>
-            <div id="search-output-divs">
+        <div class="col-sm-12 col-lg-3 text-center Previous-search-list">
+            <H3 class="button-list-header">Previous Searches</H3>
+            <div id="historic-button-container" class="button-list">
             </div>
     
-    </div>
+        </div>
+
+        <!--5 day forecast container-->
+        <div class="col-sm-12 col-lg-9 search-output text-center">
+            <H3 class="search-output-header">Five Day Forecast for <span id="five-day-search-term"></span></H3>
+            <div class="row d-flex grid gap-0 column-gap-3 m-4" id="search-output-divs">
+            </div>
+
+        </div>
+      </div>
 
     </main>
 
-    
-    <script
-  src="https://code.jquery.com/jquery-3.7.0.js"
-  integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-  crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
     <script src="./assets/js/script.js"></script>

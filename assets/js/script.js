@@ -21,10 +21,11 @@ var formInputHandler = function (event) {
     removeDisplays();
 
     var cityname = cityInputEl.value.trim();
-    console.log(cityname)
+    
 
     if (cityname) {
         getCityLatLon(cityname);
+        generateHistoryButtons(cityname);
         
         cityTitleEl.textContent = cityname;
         fiveDayTitleEl.textContent = cityname;
@@ -36,14 +37,22 @@ var formInputHandler = function (event) {
 };
 
 var historicCityClickHandler = function (event) {
-    var historicCity = event.target.getAttribute('city-button');
+    
+    var historicCity = event.target.getAttribute('id');
+
+    removeDisplays();
 
     if (historicCity) {
         getCityLatLon(historicCity);
+        generateHistoryButtons(historicCity);
 
-        cityTitleEl.textContent = '';
+
+        cityTitleEl.textContent = historicCity;
+        fiveDayTitleEl.textContent = historicCity;
     }
 };
+
+//API retrieval with city name paramater
 
 var getCityLatLon = function (location) {
     var baseGeoUrl = new URL("http://api.openweathermap.org/geo/1.0/direct");
@@ -51,10 +60,10 @@ var getCityLatLon = function (location) {
     baseGeoUrl.searchParams.append("limit", "1")
     baseGeoUrl.searchParams.append("appid", APIkey)
 
-    console.log(baseGeoUrl);
     fetch(baseGeoUrl)
     .then(function (response) {
         return response.json();
+        
     })
     .then(function (data) {
         
@@ -62,9 +71,12 @@ var getCityLatLon = function (location) {
         lon = data[0].lon;
 
         retreiveForecast(lat,lon);
+
     })
     
 };
+
+//API retrieval with latitude and longitude params
 
 var retreiveForecast = function (lat,lon) {
     var baseCityForecastUrl = new URL("https://api.openweathermap.org/data/3.0/onecall");
@@ -74,7 +86,6 @@ var retreiveForecast = function (lat,lon) {
     baseCityForecastUrl.searchParams.append("appid", APIkey)
     baseCityForecastUrl.searchParams.append("units", "imperial")
 
-    console.log(baseCityForecastUrl);
     fetch(baseCityForecastUrl)
     .then(function (response) {
         if(response.ok) {
@@ -89,7 +100,7 @@ var retreiveForecast = function (lat,lon) {
     });
 };
 
-var displayWeather = function (forecast, cityname) {
+var displayWeather = function (forecast) {
     if(forecast.length === 0) {
         currentDayContainerEl.textContent = 'No forecast found.';
         return;
@@ -106,16 +117,8 @@ var displayWeather = function (forecast, cityname) {
         var icon = array.weather[0].icon;
         var summary = array.weather[0].description;
 
-        console.log(day);
-        console.log(wind);
-        console.log(windDeg);
-        console.log(temp);
-        console.log(general);
-        console.log(icon);
-        console.log(summary);
-
         forecastContainerEl = document.createElement('div');
-        forecastContainerEl.classList = 'flex-row align-center col-sm-12 col-lg-2';
+        forecastContainerEl.classList = 'flex-row text-align-center col-sm-12 col-lg-2';
 
         //Current container display 
         var titleEl = document.createElement('p');
@@ -127,7 +130,8 @@ var displayWeather = function (forecast, cityname) {
         //Current temp display
         var tempEl = document.createElement('p');
 
-        tempEl.textContent = temp;
+        tempEl.textContent = temp + " degrees";
+        tempEl.classList=""
         forecastContainerEl.appendChild(tempEl);
 
 
@@ -155,7 +159,7 @@ var displayWeather = function (forecast, cityname) {
         if (wind > 50) {
             windEl.textContent = "Its heckin WIMDY" + wind;
         } else {
-            windEl.textContent = wind;
+            windEl.textContent = wind + " mph";
         };
 
         forecastContainerEl.appendChild(windEl);
@@ -167,6 +171,7 @@ var displayWeather = function (forecast, cityname) {
 
 
         forecastContainerEl.appendChild(summaryEl);
+        forecastContainerEl.classList="bg-light border-primary-subtle shadow rounded col-6"
         currentDayContainerEl.appendChild(forecastContainerEl);
 
     //Current forecast complete. 
@@ -186,14 +191,6 @@ var displayWeather = function (forecast, cityname) {
         icon = array.weather[0].icon;
         summary = array.summary;
 
-        console.log(day);
-        console.log(wind);
-        console.log(windDeg);
-        console.log(temp);
-        console.log(general);
-        console.log(icon);
-        console.log(summary);
-
         //5 day create element 
         forecastContainerEl = document.createElement('div');
         forecastContainerEl.classList = 'flex-row align-center col-sm-12 col-lg-2';
@@ -208,7 +205,7 @@ var displayWeather = function (forecast, cityname) {
         //5 day temp display
         var tempEl = document.createElement('p');
 
-        tempEl.textContent = temp;
+        tempEl.textContent = temp + " degrees";
         forecastContainerEl.appendChild(tempEl);
 
 
@@ -234,9 +231,9 @@ var displayWeather = function (forecast, cityname) {
         var windEl = document.createElement('p');
         
         if (wind > 50) {
-            windEl.textContent = "Its heckin WIMDY" + wind;
+            windEl.textContent = "Its heckin WIMDY" + wind + " mph";
         } else {
-            windEl.textContent = wind;
+            windEl.textContent = wind + " mph";
         };
 
         forecastContainerEl.appendChild(windEl);
@@ -246,6 +243,8 @@ var displayWeather = function (forecast, cityname) {
 
         summaryEl.textContent = summary;
         forecastContainerEl.appendChild(summaryEl);
+        forecastContainerEl.classList="bg-light border-primary-subtle shadow rounded col-2 min-vw-15"
+
         fiveDayContainerEl.appendChild(forecastContainerEl);
 
     //5 day forecast complete. 
@@ -268,17 +267,115 @@ var removeDisplays = function () {
     }
 };
 
-var generateButtons = function (buttonName) {
+//display the previous searches
+
+var generateHistoryButtons = function (buttonName) {
+
+    var storedSearches = [];
     var buttonEl = document.createElement('button');
-    buttonEl.textContent = buttonName;
-    buttonEl.classList = 'btn historic-search'
+    
+    storedSearches = JSON.parse(localStorage.getItem("Previous Searches"));
+    
+    //check for existing local array and therefore buttons
 
-    buttonContainerEl.appendChild(buttonEl);
+    if (storedSearches == null) {  
+
+        storedSearches = [];
+        buttonEl.textContent = buttonName;
+        buttonEl.classList = "m-2 btn btn-light btn-outline-secondary shadow";
+        buttonEl.id = buttonName;
+        buttonContainerEl.appendChild(buttonEl);
+
+        storedSearches.unshift(buttonName);
+        localStorage.setItem("Previous Searches", JSON.stringify(storedSearches));
+
+        } else {
         
+        //removes previous buttons to make room for re-insertion
 
-}
+        while (buttonContainerEl.hasChildNodes()){
+        buttonContainerEl.firstChild.remove();
+        };            
+
+        //check if search item already exists in array
+
+        if(storedSearches.includes(buttonName)) {
+
+            storedSearches = storedSearches;
+
+        } else {
+
+        storedSearches.unshift(buttonName);
+
+        };
+
+        //keeps array at no more than 5 previous searches
+
+        if(storedSearches.length > 5) {
+
+            storedSearches.pop();
+
+        } else {
+
+            storedSearches = storedSearches;
+
+        };
+
+        //loop to create buttons within the historic button container
+
+        for ( var i = 0; i < storedSearches.length ; i++) {
+
+            var hisButtonEl = document.createElement('button')
+
+            hisButtonEl.textContent = storedSearches[i];
+            hisButtonEl.classList = "m-2 btn btn-light btn-outline-secondary shadow";
+            hisButtonEl.id = storedSearches[i];
+        
+            buttonContainerEl.append(hisButtonEl);
+            };
+
+            localStorage.setItem("Previous Searches", JSON.stringify(storedSearches));
+        
+    };
+
+};
+
+//search bar submit button function
+
+var searchGenerateButton = function (buttonName) {
+
+    buttonEl.textContent = buttonName;
+    buttonEl.classList = "m-2 btn btn-light btn-outline-secondary shadow";
+    buttonEl.id = buttonName;
+    buttonContainerEl.appendChild(buttonEl);
+    storedSearches.unshift(buttonName);
+    localStorage.setItem("Previous Searches", storedSearches);
+};
+
+var pageLoadGenerateButtons = function () {
+
+    var storedSearches = [];
+    var buttonEl = document.createElement('button');
+    
+    storedSearches = JSON.parse(localStorage.getItem("Previous Searches"));
+
+    for (var i=0; i < storedSearches.length; i++) {
+        var hisButtonEl = document.createElement('button')
+
+            hisButtonEl.textContent = storedSearches[i];
+            hisButtonEl.classList = "m-2 btn btn-light btn-outline-secondary shadow";
+            hisButtonEl.id = storedSearches[i];
+        
+            buttonContainerEl.append(hisButtonEl);
+            };
+
+    };
 
 
-
+//event listeners
 
 searchFormEl.addEventListener('submit', formInputHandler);
+buttonContainerEl.addEventListener('click',historicCityClickHandler);
+
+//historic button generate on page load
+pageLoadGenerateButtons();
