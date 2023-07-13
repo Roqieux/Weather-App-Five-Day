@@ -55,7 +55,7 @@ var historicCityClickHandler = function (event) {
 //API retrieval with city name paramater
 
 var getCityLatLon = function (location) {
-    var baseGeoUrl = new URL("http://api.openweathermap.org/geo/1.0/direct");
+    var baseGeoUrl = new URL("https://api.openweathermap.org/geo/1.0/direct");
     baseGeoUrl.searchParams.append("q", location)
     baseGeoUrl.searchParams.append("limit", "1")
     baseGeoUrl.searchParams.append("appid", APIkey)
