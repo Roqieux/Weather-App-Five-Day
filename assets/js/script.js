@@ -243,7 +243,7 @@ var displayWeather = function (forecast) {
 
         summaryEl.textContent = summary;
         forecastContainerEl.appendChild(summaryEl);
-        forecastContainerEl.classList="bg-light border-primary-subtle shadow rounded col-2 min-vw-15"
+        forecastContainerEl.classList="bg-light border-primary-subtle shadow rounded col-sm-12 col-lg-2 min-vw-15"
 
         fiveDayContainerEl.appendChild(forecastContainerEl);
 
